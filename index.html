@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KYUECODM LOADOUTS</title>
+  
+  <!-- Tailwind CSS CDN (Stable v3) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Social Brand Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  
+  <!-- Google Fonts (Rajdhani & Orbitron) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0d0607;
+      --accent-red: #dc2626;
+      --accent-glow: rgba(220, 38, 38, 0.4);
+      --card-bg: rgba(18, 7, 10, 0.85);
+      --border-red: rgba(220, 38, 38, 0.35);
+    }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background-color: var(--bg-dark);
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+    
+    .font-orbitron {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* Red Cyber Glowing Card Style */
+    .cyber-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-red);
+      box-shadow: 0 0 15px rgba(180, 20, 30, 0.15), inset 0 0 12px rgba(180, 20, 30, 0.1);
+      backdrop-filter: blur(12px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cyber-card:hover {
+      border-color: rgba(239, 68, 68, 0.8);
+      box-shadow: 0 0 25px rgba(220, 38, 38, 0.4), inset 0 0 20px rgba(220, 38, 38, 0.2);
+      transform: translateY(-4px) scale(1.01);
+    }
+
+    /* Outer Red Glowing Container Frame */
+    .cyber-frame {
+      border: 1.5px solid rgba(220, 38, 38, 0.4);
+      box-shadow: 0 0 30px rgba(180, 20, 30, 0.25);
+      backdrop-filter: blur(16px);
+    }
+
+    /* SMOOTH CROSS-FADE ANIMATION */
+    .view-card {
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    .view-card.fade-out {
+      opacity: 0;
+      transform: scale(0.97) translateY(8px);
+      pointer-events: none;
+    }
+
+    .view-card.fade-in-prep {
+      opacity: 0;
+      transform: scale(0.97) translateY(-8px);
+    }
+
+    /* Background Overlay Image - Google Drive Link */
+    .bg-codm {
+      background-image: linear-gradient(to bottom, rgba(13, 6, 7, 0.82), rgba(13, 6, 7, 0.94)), 
+                        url('https://lh3.googleusercontent.com/d/1qPgCJ_HL1Tc92YXRCqi560--ENYtQ02-');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0d0607;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #991b1b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ef4444;
+    }
+
+    /* Modal Smooth Animation */
+    .modal-backdrop {
+      transition: opacity 0.3s ease;
+    }
+    .modal-backdrop.hidden-modal {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .modal-box {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    }
+    .modal-backdrop.hidden-modal .modal-box {
+      transform: scale(0.92) translateY(15px);
+      opacity: 0;
+    }
+  </style>
+</head>
+<body class="bg-codm min-h-screen flex flex-col justify-between selection:bg-red-700 selection:text-white">
+
+  <!-- TOP BAR / HEADER -->
+  <header class="w-full px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-red-950/60 bg-black/70 backdrop-blur-md sticky top-0 z-40 transition-all duration-300">
+    <div class="flex items-center gap-3">
+      <span class="font-orbitron text-2xl tracking-wider text-red-500 font-black flex items-center gap-2 drop-shadow-[0_0_10px_rgba(220,38,38,0.5)]">
+        <i data-lucide="crosshair" class="w-7 h-7 text-red-500 animate-pulse"></i> KYUECODM LOADOUTS
+      </span>
+    </div>
+
+    <!-- CODM USERNAME COPY SECTION -->
+    <div class="relative flex items-center gap-3 bg-red-950/60 border border-red-800/60 px-4 py-1.5 rounded-xl shadow-lg hover:border-red-600 transition duration-300">
+      <div class="flex items-center gap-2 font-orbitron text-sm">
+        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+        <span class="text-gray-400 font-semibold">IGN:</span>
+        <button id="codmUsername" type="button" onclick="toggleUsernameDetails()" aria-expanded="false" aria-controls="usernameDetails" class="bg-transparent border-0 p-0 text-red-400 font-bold tracking-wide cursor-pointer focus:outline-none">kyuecdm.岳</button>
+      </div>
+      <button onclick="copyUsername()" class="bg-red-700 hover:bg-red-600 active:scale-95 text-white px-3 py-1.5 rounded-lg transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-xs font-orbitron font-bold shadow-md shadow-red-950">
+        <i data-lucide="user-plus" class="w-4 h-4"></i> ADD
+      </button>
+      <div id="usernameDetails" class="hidden absolute top-full right-0 mt-2 min-w-max bg-red-950 border border-red-700 rounded-lg px-4 py-2 text-sm font-orbitron text-red-300 shadow-lg z-50 flex items-center gap-3">
+        <span>UID: 7034869404676390913</span>
+        <button type="button" onclick="copyUID()" class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded-md flex items-center gap-1 text-xs font-bold transition-colors">
+          <i data-lucide="copy" class="w-3.5 h-3.5" aria-hidden="true"></i> COPY UID
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="container mx-auto px-4 py-8 flex-1 flex flex-col justify-center items-center relative">
+    
+    <!-- STEP 1: GAME MODE SELECTION VIEW -->
+    <div id="modeSelectionView" class="w-full max-w-4xl cyber-frame rounded-2xl p-6 md:p-10 bg-black/80 text-center view-card">
+      <div class="mb-8">
+        <h1 class="font-orbitron text-3xl md:text-5xl font-extrabold text-white tracking-widest uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+          Select Game Mode
+        </h1>
+        <p class="text-red-400/80 text-sm md:text-base mt-2 tracking-wide font-medium">Choose your preferred mode to view optimized gunsmith builds</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-2xl mx-auto">
+        <!-- MP Selection -->
+        <button onclick="selectMode('MP')" class="cyber-card rounded-2xl p-8 flex flex-col items-center justify-center gap-4 group cursor-pointer">
+          <div class="p-4 rounded-2xl bg-red-950/50 border border-red-700/50 group-hover:border-red-500 group-hover:bg-red-900/40 transition duration-300 shadow-inner">
+            <i data-lucide="swords" class="w-12 h-12 text-red-500 group-hover:scale-110 transition duration-300"></i>
+          </div>
+          <div>
+            <h2 class="font-orbitron font-black text-2xl text-white group-hover:text-red-400 transition">MULTIPLAYER</h2>
+            <p class="text-xs text-gray-400 mt-1">Aggressive & Mobility Focused Builds</p>
+          </div>
+        </button>
+
+        <!-- BR Selection -->
+        <button onclick="selectMode('BR')" class="cyber-card rounded-2xl p-8 flex flex-col items-center justify-center gap-4 group cursor-pointer">
+          <div class="p-4 rounded-2xl bg-red-950/50 border border-red-700/50 group-hover:border-red-500 group-hover:bg-red-900/40 transition duration-300 shadow-inner">
+            <i data-lucide="shield" class="w-12 h-12 text-red-500 group-hover:scale-110 transition duration-300"></i>
+          </div>
+          <div>
+            <h2 class="font-orbitron font-black text-2xl text-white group-hover:text-red-400 transition">BATTLE ROYALE</h2>
+            <p class="text-xs text-gray-400 mt-1">Low Recoil & Range Focused Builds</p>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2: WEAPON CLASS SELECTION VIEW -->
+    <div id="mainCategoryView" class="hidden w-full max-w-5xl cyber-frame rounded-2xl p-6 md:p-10 bg-black/80 view-card">
+      
+      <div class="flex justify-between items-center mb-6 border-b border-red-950/80 pb-4">
+        <button onclick="backToModeSelection()" class="flex items-center gap-2 text-red-400 hover:text-white transition-all font-orbitron text-sm cursor-pointer hover:-translate-x-1 duration-200">
+          <i data-lucide="arrow-left" class="w-5 h-5"></i> CHANGE GAME MODE
+        </button>
+
+        <div id="activeModeBadge" class="bg-red-950/80 border border-red-700 px-4 py-1 rounded-lg font-orbitron text-xs font-bold text-red-400 uppercase tracking-widest shadow-md">
+          MODE: MULTIPLAYER
+        </div>
+      </div>
+
+      <div class="text-center mb-8">
+        <h1 class="font-orbitron text-3xl md:text-4xl font-extrabold text-white tracking-widest uppercase">
+          Select Weapon Class
+        </h1>
+        <p class="text-red-400/80 text-sm md:text-base mt-1">Choose a category to view gunsmith builds</p>
+      </div>
+
+      <!-- Categories Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <button onclick="selectCategory('Assault')" class="cyber-card rounded-xl p-5 flex flex-col items-center justify-center gap-2 group cursor-pointer">
+          <i data-lucide="crosshair" class="w-8 h-8 text-red-500 group-hover:scale-110 transition duration-300"></i>
+          <span class="font-orbitron font-bold text-base md:text-lg text-white group-hover:text-red-400 text-center">ASSAULT RIFLE</span>
+        </button>
+
+        <button onclick="selectCategory('SMG')" class="cyber-card rounded-xl p-5 flex flex-col items-center justify-center gap-2 group cursor-pointer">
+          <i data-lucide="zap" class="w-8 h-8 text-red-500 group-hover:scale-110 transition duration-300"></i>
+          <span class="font-orbitron font-bold text-base md:text-lg text-white group-hover:text-red-400 text-center">SUB MACHINE GUN</span>
+        </button>
+
+        <button onclick="selectCategory('LMG')" class="cyber-card rounded-xl p-5 flex flex-col items-center justify-center gap-2 group cursor-pointer">
+          <i data-lucide="shield" class="w-8 h-8 text-red-500 group-hover:scale-110 transition duration-300"></i>
+          <span class="font-orbitron font-bold text-base md:text-lg text-white group-hover:text-red-400 text-center">LIGHT MACHINE GUN</span>
+        </button>
+
+        <button onclick="selectCategory('Shotgun')" class="cyber-card rounded-xl p-5 flex flex-col items-center justify-center gap-2 group cursor-pointer">
+          <i data-lucide="flame" class="w-8 h-8 text-red-500 group-hover:scale-110 transition duration-300"></i>
+          <span class="font-orbitron font-bold text-base md:text-lg text-white group-hover:text-red-400 text-center">SHOTGUN</span>
+        </button>
+
+        <button onclick="selectCategory('Marksman')" class="cyber-card rounded-xl p-5 flex flex-col items-center justify-center gap-2 group cursor-pointer">
+          <i data-lucide="target" class="w-8 h-8 text-red-500 group-hover:scale-110 transition duration-300"></i>
+          <span class="font-orbitron font-bold text-base md:text-lg text-white group-hover:text-red-400 text-center">MARKSMAN RIFLE</span>
+        </button>
+
+        <button onclick="selectCategory('Sniper')" class="cyber-card rounded-xl p-5 flex flex-col items-center justify-center gap-2 group cursor-pointer">
+          <i data-lucide="disc" class="w-8 h-8 text-red-500 group-hover:scale-110 transition duration-300"></i>
+          <span class="font-orbitron font-bold text-base md:text-lg text-white group-hover:text-red-400 text-center">SNIPER RIFLE</span>
+        </button>
+
+        <button onclick="selectCategory('Pistol')" class="cyber-card rounded-xl p-5 flex flex-col items-center justify-center gap-2 group cursor-pointer">
+          <i data-lucide="wrench" class="w-8 h-8 text-red-500 group-hover:scale-110 transition duration-300"></i>
+          <span class="font-orbitron font-bold text-base md:text-lg text-white group-hover:text-red-400 text-center">PISTOL</span>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- STEP 3: GUN LIST VIEW -->
+    <div id="gunListView" class="hidden w-full max-w-5xl cyber-frame rounded-2xl p-6 md:p-8 bg-black/85 view-card">
+      <!-- Top Actions -->
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6 border-b border-red-950/80 pb-4">
+        <button onclick="closeCategoryView()" class="flex items-center gap-2 text-red-400 hover:text-white transition-all font-orbitron text-sm cursor-pointer hover:-translate-x-1 duration-200">
+          <i data-lucide="arrow-left" class="w-5 h-5"></i> BACK TO CATEGORIES
+        </button>
+
+        <div class="bg-red-950/80 border border-red-700/80 px-6 py-1.5 rounded-full font-orbitron font-extrabold text-xl tracking-wider text-white shadow-lg" id="selectedCategoryTitle">
+          ASSAULT
+        </div>
+
+        <!-- Search Bar -->
+        <div class="relative w-full md:w-64">
+          <input type="text" id="searchInput" oninput="filterGuns()" placeholder="Search weapon..." class="w-full bg-black/80 border border-red-900/80 rounded-full px-9 py-2 text-sm focus:outline-none focus:border-red-500 transition-all text-white placeholder-gray-500">
+          <i data-lucide="search" class="w-4 h-4 text-red-400 absolute left-3 top-3"></i>
+        </div>
+      </div>
+
+      <!-- Gun Grid -->
+      <div id="gunGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-h-[60vh] overflow-y-auto p-1">
+        <!-- Dynamic Gun Cards -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ATTACHMENT DETAILS MODAL -->
+  <div id="attachmentModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex justify-center items-center z-50 p-4 modal-backdrop hidden-modal">
+    <div id="modalContent" class="cyber-frame bg-black/95 rounded-2xl w-full max-w-2xl p-6 relative my-auto modal-box">
+      <button onclick="closeAttachmentModal()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors duration-200 cursor-pointer z-10 p-1">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4 border-b border-red-950 pb-3">
+        <div id="modalGunType" class="text-xs font-orbitron bg-red-950 border border-red-800 text-red-400 px-2.5 py-0.5 rounded-md font-bold">ASSAULT</div>
+        <div id="modalSelectedModeBadge" class="text-xs font-orbitron bg-red-700 text-white font-bold px-2.5 py-0.5 rounded-md shadow-sm">MP BUILD</div>
+        <h2 id="modalGunName" class="font-orbitron text-2xl font-black text-white">M4</h2>
+      </div>
+
+      <!-- Loadout Content Display -->
+      <div class="bg-red-950/20 border border-red-900/40 rounded-xl p-5">
+        <div class="flex items-center justify-between border-b border-red-800/40 pb-2 mb-4">
+          <h3 id="modalBuildTitle" class="font-orbitron text-base font-bold text-red-400 flex items-center gap-2">
+            <i data-lucide="wrench" class="w-5 h-5 text-red-500"></i> ATTACHMENTS
+          </h3>
+          <p id="modalBuildDesc" class="text-xs text-gray-400 italic">kyuecdm.岳</p>
+        </div>
+
+        <ul id="modalAttachmentList" class="space-y-2 text-sm text-gray-200 mb-6">
+          <!-- Dynamic Attachments -->
+        </ul>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 left-6 bg-red-900/90 text-white px-5 py-2.5 rounded-xl shadow-2xl font-orbitron text-sm hidden items-center gap-2.5 border border-red-500 z-50 transition-all duration-300 backdrop-blur-md">
+    <i data-lucide="check-circle-2" class="w-5 h-5 text-red-400"></i> <span id="toastMsg">Code copied to clipboard!</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="w-full px-6 py-4 border-t border-red-950/80 bg-black/80 backdrop-blur-md flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+    <div class="text-gray-400 font-orbitron">
+      DONATIONS (GCash): <span class="text-red-400 font-bold">09288476050</span>
+    </div>
+
+    <div class="font-orbitron tracking-widest text-gray-300 flex items-center gap-2 font-bold">
+      <i data-lucide="gamepad-2" class="w-4 h-4 text-red-500"></i> CALL OF DUTY MOBILE
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a href="https://www.facebook.com/profile.php?id=61586976453097" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 rounded-full bg-white/5 hover:bg-red-700 flex items-center justify-center transition-all duration-200 text-white hover:scale-110">
+        <i class="fa-brands fa-facebook-f w-4 h-4" aria-hidden="true"></i>
+      </a>
+      <a href="https://discord.gg/xKjUSzqJm9" target="_blank" rel="noopener noreferrer" aria-label="Discord" class="w-8 h-8 rounded-full bg-white/5 hover:bg-red-700 flex items-center justify-center transition-all duration-200 text-white hover:scale-110">
+        <i class="fa-brands fa-discord w-4 h-4" aria-hidden="true"></i>
+      </a>
+      <a href="https://www.instagram.com/vxjyue/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 rounded-full bg-white/5 hover:bg-red-700 flex items-center justify-center transition-all duration-200 text-white hover:scale-110">
+        <i class="fa-brands fa-instagram w-4 h-4" aria-hidden="true"></i>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const gunsData = [
+        { 
+          id: 1, 
+          name: "M4", 
+          category: "Assault", 
+          mp: {
+            attachments: ["Monolithic Suppressor", "No Stock", "OWC Laser - Tactical", "50 Round Extended Mag", "Granulated Grip Tape"],
+            desc: "kyuecdm.岳"
+          },
+          br: null
+        },
+        { 
+          id: 2, 
+          name: "KN-44", 
+          category: "Assault", 
+          mp: {
+            attachments: ["Monolithic Suppressor", "OWC Ranger", "No Stock", "38 Round Fast Reload", "Granulated Grip Tape"],
+            desc: "kyuecdm.岳"
+          },
+          br: null
+        },
+        { 
+          id: 3, 
+          name: "HVK-30", 
+          category: "Assault", 
+          mp: {
+            attachments: ["YKM Integral Suppressor Heavy", "YKM Combat Stock", "Large Caliber Ammo", "OWC Laser - Tactical", "Granulated Grip Tape"],
+            desc: "kyuecdm.岳"
+          },
+          br: {
+            attachments: ["Barrel: YKM Integral Suppressor Heavy", "Stock: YKM Combat Stock", "Perk: Sleight of Hand", "Ammunition: Large Caliber Ammo", "Rear Grip: Granulated Grip Tape"],
+            desc: "kyuecdm.岳"
+          }
+        },
+        { 
+          id: 18, 
+          name: "AK117", 
+          category: "Assault", 
+          mp: null,
+          br: {
+            attachments: ["Muzzle: Monolithic Suppressor", "Barrel: OWC Marksman", "Stock: RTC Steady Stock", "Laser: OWC Laser - Tactical", "Ammunition: 40 Round Extended Mag"],
+            desc: "kyuecdm.岳"
+          }
+        },
+        { 
+          id: 19, 
+          name: "RAM-7", 
+          category: "Assault", 
+          mp: null,
+          br: {
+            attachments: ["Muzzle: Monolithic Suppressor", "Barrel: FORGE TAC Eclipse", "Laser: OWC Laser - Tactical", "Ammunition: 50 Round Reload", "Rear Grip: Granulated Grip Tape"],
+            desc: "kyuecdm.岳"
+          }
+        },
+        { 
+          id: 4, 
+          name: "HS0405", 
+          category: "Shotgun", 
+          mp: {
+            attachments: ["Choke", "RTC Extended Light Barrel", "No Stock", "RTC Laser 1mW", "Speed Up Kill"],
+            desc: "kyuecdm.岳"
+          },
+          br: null
+        },
+        { 
+          id: 9, 
+          name: "KRM-262", 
+          category: "Shotgun", 
+          mp: {
+            attachments: ["Marauder Suppressor", "RTC Light Extended Barrel", "No Stock", "RTC Laser 1mW", "Stippled Grip Tape"],
+            desc: "kyuecdm.岳"
+          },
+          br: {
+            attachments: ["Muzzle: Choke", "Barrel: RTC Light Extended Barrel", "Stock: No Stock", "Laser: MIP Laser 5mW", "Rear Grip: Stippled Grip Tape"],
+            desc: "kyuecdm.岳"
+          }
+        },
+        { 
+          id: 16, 
+          name: "BY15", 
+          category: "Shotgun", 
+          mp: null,
+          br: {
+            attachments: ["Muzzle: Monolithic Suppressor", "Barrel: RTC Extended Light Barrel", "Stock: YKM Light Stock", "Ammunition: Tube Extension (+2 Ammo)"],
+            desc: "kyuecdm.岳"
+          }
+        },
+        { 
+          id: 17, 
+          name: "JAK-12", 
+          category: "Shotgun", 
+          mp: null,
+          br: {
+            attachments: ["Muzzle: Marauder Suppressor", "Barrel: OWC Marksman", "Perk: Disable", "Laser: MIP Laser 5mW", "Ammunition: Large Extended Mag D"],
+            desc: "kyuecdm.岳"
+          }
+        },
+        { 
+          id: 5, 
+          name: "DL Q33", 
+          category: "Sniper", 
+          mp: {
+            attachments: ["MIP Light", "OWC Light Suppressor", "OWC Skeleton Stock", "Extended Mag A", "FMJ"],
+            desc: "kyuecdm.岳"
+          },
+          br: {
+            attachments: ["Muzzle: MIP Light Flash Guard", "Barrel: MIP Light", "Stock: OWC Skeleton Stock", "Laser: OWC Laser - Tactical", "Ammunition: Maevwat Omega-1"],
+            desc: "kyuecdm.岳"
+          }
+        },
+        { 
+          id: 20, 
+          name: "Rytec AMR", 
+          category: "Sniper", 
+          mp: null,
+          br: {
+            attachments: ["Muzzle: Monolithic Suppressor", "Barrel: OWC Marksman", "Stock: RTC Steady Stock", "Ammunition: 25x59mm Explosive Mag"],
+            desc: "kyuecdm.岳"
+          }
+        },
+        { 
+          id: 6, 
+          name: "LW3-Tundra", 
+          category: "Sniper", 
+          mp: {
+            attachments: ["26.5\" Hammer Forged", "SAS Combat Stock", "7 Rnd Mag", "Serpent Wrap", "FMJ"],
+            desc: "kyuecdm.岳"
+          },
+          br: null
+        },
+        { 
+          id: 7, 
+          name: "Locus", 
+          category: "Sniper", 
+          mp: {
+            attachments: ["YKM Lightweight Short", "OWC Skeleton Stock", "OWC Stopping Power Reload", "Stippled Grip Tape", "FMJ"],
+            desc: "kyuecdm.岳"
+          },
+          br: null
+        },
+        { 
+          id: 8, 
+          name: "CBR4", 
+          category: "SMG", 
+          mp: {
+            attachments: ["Monolithic Suppressor", "YKM Light Stock", "OWC Laser - Tactical", "Granulated Grip Tape", "RTC Light Muzzle Brake"],
+            desc: "kyuecdm.岳"
+          },
+          br: null
+        },
+        { 
+          id: 12, 
+          name: "TEC-9", 
+          category: "SMG", 
+          mp: {
+            attachments: ["Full Auto Repeater", "8.1\" Task Force", "SAS Combat Stock", "Fast Extended Mag", "Airborne Elastic Wrap"],
+            desc: "kyuecdm.岳"
+          },
+          br: null
+        },
+        { 
+          id: 13, 
+          name: "Switchblade X9", 
+          category: "SMG", 
+          mp: {
+            attachments: ["Monolithic Suppressor", "MIP Extended Light Barrel", "OWC Skeleton Stock", "Ranger Foregrip", "Extended Mag A"],
+            desc: "kyuecdm.岳"
+          },
+          br: null
+        },
+        { 
+          id: 21, 
+          name: "OTs 9", 
+          category: "SMG", 
+          mp: null,
+          br: {
+            attachments: ["Muzzle: Agency Suppressor", "Barrel: VDV Reinforced", "Perk: Sleight of Hand", "Laser: MIP Laser 5mW", "Ammunition: Fast Extended Mag B"],
+            desc: "kyuecdm.岳"
+          }
+        },
+        /* LMG WEAPONS */
+        { 
+          id: 10, 
+          name: "MG42", 
+          category: "LMG", 
+          mp: {
+            attachments: ["Quicksilver Silencer", "KRAUSNICK 355MM Rapid", "Nydar Model 47", "VDD 64M", "8mm JAEGER 250 Round Box"],
+            desc: "kyuecdm.岳"
+          },
+          br: null
+        },
+        { 
+          id: 11, 
+          name: "Hades", 
+          category: "LMG", 
+          mp: {
+            attachments: ["Agency Suppressor", "Rapid Fire Barrel", "Classic Red Dot Sight", "Disable", "84 Round Hybrid Mag"],
+            desc: "kyuecdm.岳"
+          },
+          br: {
+            attachments: ["Barrel: Rapid Fire Barrel", "Perk: Disable", "Underbarrel: Crossbar", "Ammunition: 84 Round Hybrid Mag", "Rear Grip: Firm Grip Tape"],
+            desc: "kyuecdm.岳"
+          }
+        },
+        /* PISTOL WEAPONS */
+        { 
+          id: 14, 
+          name: ".50 GS", 
+          category: "Pistol", 
+          mp: {
+            attachments: ["Monolithic Suppressor", "MIP Extended Light Barrel", "MIP Laser 5mW", "Lightweight Trigger", "Extended Mag A"],
+            desc: "kyuecdm.岳"
+          },
+          br: null
+        },
+        { 
+          id: 15, 
+          name: "Machine Pistol", 
+          category: "Pistol", 
+          mp: {
+            attachments: ["Strife Compensator", "Rapid Action", "8MM NAMBU 20 Round Mags", "Stippled Grip"],
+            desc: "kyuecdm.岳"
+          },
+          br: null
+        }
+      ];
+
+      let selectedGameMode = 'MP';
+      let currentCategory = 'Assault';
+      let selectedGun = null;
+
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+
+      function switchView(hideId, showId) {
+        const hideElem = document.getElementById(hideId);
+        const showElem = document.getElementById(showId);
+
+        if (!hideElem || !showElem) return;
+
+        hideElem.classList.add('fade-out');
+
+        setTimeout(() => {
+          hideElem.classList.add('hidden');
+          hideElem.classList.remove('fade-out');
+
+          showElem.classList.add('fade-in-prep');
+          showElem.classList.remove('hidden');
+
+          setTimeout(() => {
+            showElem.classList.remove('fade-in-prep');
+          }, 20);
+        }, 200);
+      }
+
+      window.copyUsername = function() {
+        const username = "kyuecdm.岳";
+        navigator.clipboard.writeText(username).then(() => {
+          showToast(`Copied CODM Username: ${username}`);
+        });
+      };
+
+      window.toggleUsernameDetails = function() {
+        const details = document.getElementById('usernameDetails');
+        const usernameButton = document.getElementById('codmUsername');
+        if (!details || !usernameButton) return;
+
+        const isHidden = details.classList.toggle('hidden');
+        usernameButton.setAttribute('aria-expanded', String(!isHidden));
+      };
+
+      window.copyUID = function() {
+        const uid = "7034869404676390913";
+        navigator.clipboard.writeText(uid).then(() => {
+          showToast(`Copied UID: ${uid}`);
+        });
+      };
+
+      function showToast(msg) {
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+        if (toast && toastMsg) {
+          toastMsg.innerText = msg;
+          toast.classList.remove('hidden');
+          toast.classList.add('flex');
+          setTimeout(() => {
+            toast.classList.add('hidden');
+            toast.classList.remove('flex');
+          }, 3000);
+        }
+      }
+
+      window.selectMode = function(mode) {
+        selectedGameMode = mode;
+        const activeBadge = document.getElementById('activeModeBadge');
+        if (activeBadge) {
+          activeBadge.innerText = `MODE: ${mode === 'MP' ? 'MULTIPLAYER' : 'BATTLE ROYALE'}`;
+        }
+        switchView('modeSelectionView', 'mainCategoryView');
+      };
+
+      window.backToModeSelection = function() {
+        switchView('mainCategoryView', 'modeSelectionView');
+      };
+
+      window.selectCategory = function(cat) {
+        currentCategory = cat;
+        const titleElem = document.getElementById('selectedCategoryTitle');
+        if (titleElem) titleElem.innerText = cat.toUpperCase();
+        renderGuns();
+        switchView('mainCategoryView', 'gunListView');
+      };
+
+      window.closeCategoryView = function() {
+        switchView('gunListView', 'mainCategoryView');
+      };
+
+      function renderGuns() {
+        const gunGrid = document.getElementById('gunGrid');
+        if (!gunGrid) return;
+        const searchVal = (document.getElementById('searchInput')?.value || '').toLowerCase();
+
+        const filtered = gunsData.filter(g => 
+          g.category.toLowerCase() === currentCategory.toLowerCase() && 
+          g.name.toLowerCase().includes(searchVal) &&
+          (selectedGameMode === 'MP' ? Boolean(g.mp) : Boolean(g.br))
+        );
+
+        if (filtered.length === 0) {
+          gunGrid.innerHTML = `<div class="col-span-full text-center py-8 text-gray-400 font-orbitron">No guns found in this category for ${selectedGameMode}.</div>`;
+          return;
+        }
+
+        gunGrid.innerHTML = filtered.map(gun => `
+          <div onclick="openAttachmentModal(${gun.id})" class="cyber-card rounded-xl p-5 flex flex-col items-center justify-between gap-4 group cursor-pointer hover:border-red-500 transition duration-300 text-center">
+            <span class="font-orbitron font-extrabold text-2xl text-white group-hover:text-red-400 transition tracking-wide">${gun.name}</span>
+            <button class="w-full bg-red-950/80 hover:bg-red-700 text-red-300 hover:text-white border border-red-800/60 rounded-lg py-2 text-xs font-orbitron font-bold transition flex items-center justify-center gap-1.5 shadow-md">
+              <i data-lucide="eye" class="w-4 h-4"></i> VIEW LOADOUT
+            </button>
+          </div>
+        `).join('');
+
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+      }
+
+      window.filterGuns = function() {
+        renderGuns();
+      };
+
+      window.openAttachmentModal = function(gunId) {
+        const gun = gunsData.find(g => g.id === gunId);
+        if (!gun) return;
+        selectedGun = gun;
+
+        const buildData = selectedGameMode === 'MP' ? gun.mp : gun.br;
+        if (!buildData) return;
+
+        document.getElementById('modalGunType').innerText = gun.category.toUpperCase();
+        document.getElementById('modalSelectedModeBadge').innerText = `${selectedGameMode} BUILD`;
+        document.getElementById('modalGunName').innerText = gun.name;
+        document.getElementById('modalBuildDesc').innerText = buildData.desc || 'kyuecdm.岳';
+        const listContainer = document.getElementById('modalAttachmentList');
+        listContainer.innerHTML = (buildData.attachments || []).map(att => `
+          <li class="flex items-center gap-2 bg-black/60 px-3 py-2 rounded-lg border border-red-900/30">
+            <i data-lucide="check" class="w-4 h-4 text-red-500"></i>
+            <span>${att}</span>
+          </li>
+        `).join('');
+
+        const modal = document.getElementById('attachmentModal');
+        modal.classList.remove('hidden-modal');
+
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+      };
+
+      window.closeAttachmentModal = function() {
+        const modal = document.getElementById('attachmentModal');
+        modal.classList.add('hidden-modal');
+      };
+
+    });
+  </script>
+</body>
+</html>
