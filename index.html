@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KYUECODM LOADOUTS</title>
+  <link rel="icon" type="image/png" href="./logo.png">
   
   <!-- Tailwind CSS CDN (Stable v3) -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -118,6 +119,13 @@
       transform: scale(0.92) translateY(15px);
       opacity: 0;
     }
+    .settings-morph-fallback {
+      animation: settings-morph-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    @keyframes settings-morph-in {
+      from { opacity: 0; transform: translateY(6px) scale(0.985); filter: blur(2px); }
+      to { opacity: 1; transform: scale(1); filter: blur(0); }
+    }
   </style>
 </head>
 <body class="bg-codm min-h-screen flex flex-col justify-between selection:bg-red-700 selection:text-white">
@@ -126,26 +134,32 @@
   <header class="w-full px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-red-950/60 bg-black/70 backdrop-blur-md sticky top-0 z-40 transition-all duration-300">
     <div class="flex items-center gap-3">
       <span class="font-orbitron text-2xl tracking-wider text-red-500 font-black flex items-center gap-2 drop-shadow-[0_0_10px_rgba(220,38,38,0.5)]">
-        <i data-lucide="crosshair" class="w-7 h-7 text-red-500 animate-pulse"></i> KYUECODM LOADOUTS
+        <img src="./logo.png" alt="KYUECODM logo" class="w-9 h-9 rounded-lg object-cover"> KYUECODM LOADOUTS
       </span>
     </div>
 
-    <!-- CODM USERNAME COPY SECTION -->
-    <div class="relative flex items-center gap-3 bg-red-950/60 border border-red-800/60 px-4 py-1.5 rounded-xl shadow-lg hover:border-red-600 transition duration-300">
-      <div class="flex items-center gap-2 font-orbitron text-sm">
-        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
-        <span class="text-gray-400 font-semibold">IGN:</span>
-        <button id="codmUsername" type="button" onclick="toggleUsernameDetails()" aria-expanded="false" aria-controls="usernameDetails" class="bg-transparent border-0 p-0 text-red-400 font-bold tracking-wide cursor-pointer focus:outline-none">kyuecdm.岳</button>
-      </div>
-      <button onclick="copyUsername()" class="bg-red-700 hover:bg-red-600 active:scale-95 text-white px-3 py-1.5 rounded-lg transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-xs font-orbitron font-bold shadow-md shadow-red-950">
-        <i data-lucide="user-plus" class="w-4 h-4"></i> ADD
-      </button>
-      <div id="usernameDetails" class="hidden absolute top-full right-0 mt-2 min-w-max bg-red-950 border border-red-700 rounded-lg px-4 py-2 text-sm font-orbitron text-red-300 shadow-lg z-50 flex items-center gap-3">
-        <span>UID: 7034869404676390913</span>
-        <button type="button" onclick="copyUID()" class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded-md flex items-center gap-1 text-xs font-bold transition-colors">
-          <i data-lucide="copy" class="w-3.5 h-3.5" aria-hidden="true"></i> COPY UID
+    <div class="flex items-center gap-3">
+      <!-- CODM USERNAME COPY SECTION -->
+      <div class="relative flex items-center gap-3 bg-red-950/60 border border-red-800/60 px-4 py-1.5 rounded-xl shadow-lg hover:border-red-600 transition duration-300">
+        <div class="flex items-center gap-2 font-orbitron text-sm">
+          <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+          <span class="text-gray-400 font-semibold">IGN:</span>
+          <button id="codmUsername" type="button" onclick="toggleUsernameDetails()" aria-expanded="false" aria-controls="usernameDetails" class="bg-transparent border-0 p-0 text-red-400 font-bold tracking-wide cursor-pointer focus:outline-none">kyuecdm.岳</button>
+        </div>
+        <button onclick="copyUsername()" class="bg-red-700 hover:bg-red-600 active:scale-95 text-white px-3 py-1.5 rounded-lg transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-xs font-orbitron font-bold shadow-md shadow-red-950">
+          <i data-lucide="user-plus" class="w-4 h-4"></i> ADD
         </button>
+        <div id="usernameDetails" class="hidden absolute top-full right-0 mt-2 min-w-max bg-red-950 border border-red-700 rounded-lg px-4 py-2 text-sm font-orbitron text-red-300 shadow-lg z-50 flex items-center gap-3">
+          <span>UID: 7034869404676390913</span>
+          <button type="button" onclick="copyUID()" class="bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded-md flex items-center gap-1 text-xs font-bold transition-colors">
+            <i data-lucide="copy" class="w-3.5 h-3.5" aria-hidden="true"></i> COPY UID
+          </button>
+        </div>
       </div>
+      <button id="settingsButton" type="button" aria-label="KYUE SETTINGS" title="KYUE SETTINGS" aria-expanded="false" aria-controls="settingsModal" onclick="openSettingsModal()" class="bg-red-950/60 hover:bg-red-900/80 border border-red-800/60 hover:border-red-600 text-red-300 hover:text-white px-3 py-2 rounded-xl shadow-lg transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 flex items-center gap-2 font-orbitron text-xs font-bold">
+        <i data-lucide="settings" class="w-5 h-5" aria-hidden="true"></i>
+        <span>KYUE SETTINGS</span>
+      </button>
     </div>
   </header>
 
@@ -304,6 +318,113 @@
     </div>
   </div>
 
+  <!-- SETTINGS MODAL -->
+  <div id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" class="fixed inset-0 bg-black/70 backdrop-blur-md flex justify-center items-center z-50 p-4 modal-backdrop hidden-modal">
+    <div class="cyber-frame bg-black/95 rounded-2xl w-full max-w-3xl p-6 relative modal-box">
+      <div class="flex items-center justify-between">
+        <h2 id="settingsTitle" class="font-orbitron text-xl font-bold text-white">Settings</h2>
+        <button id="settingsExitButton" type="button" onclick="closeSettingsModal()" class="bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-orbitron text-sm font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500">
+          EXIT
+        </button>
+      </div>
+      <div class="mt-6 flex gap-6">
+        <aside id="settingsCategoryList" role="tablist" aria-label="Settings categories" class="relative flex w-36 shrink-0 flex-col gap-2 border-r border-red-900/60 pr-4 font-orbitron text-xs font-bold">
+          <span id="settingsCategoryIndicator" aria-hidden="true" class="pointer-events-none absolute left-0 right-4 top-0 rounded-lg border border-red-700/70 bg-red-950/80 transition-[height,transform] duration-300 ease-out"></span>
+          <button id="basicSettingsTab" type="button" role="tab" aria-selected="true" aria-controls="basicSettingsPanel" onclick="selectSettingsCategory('basic')" class="relative z-10 w-full rounded-lg px-3 py-2.5 text-left text-red-300">BASIC</button>
+          <button id="graphicsSettingsTab" type="button" role="tab" aria-selected="false" aria-controls="graphicsSettingsPanel" onclick="selectSettingsCategory('graphics')" class="relative z-10 w-full rounded-lg px-3 py-2.5 text-left text-gray-500">GRAPHICS</button>
+          <button id="sensitivitySettingsTab" type="button" role="tab" aria-selected="false" aria-controls="sensitivitySettingsPanel" onclick="selectSettingsCategory('sensitivity')" class="relative z-10 w-full rounded-lg px-3 py-2.5 text-left text-gray-500">SENSITIVITY</button>
+        </aside>
+        <div id="settingsPanels" class="min-w-0 flex-1">
+        <div id="basicSettingsPanel" role="tabpanel" aria-labelledby="basicSettingsTab" class="min-w-0 w-full space-y-5">
+          <div>
+            <div class="mb-2 flex items-center justify-between font-orbitron text-sm">
+              <span class="text-gray-300">FOV RANGE</span>
+              <span class="font-bold text-red-400">70%</span>
+            </div>
+            <div role="progressbar" aria-label="FOV RANGE" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" class="h-2.5 overflow-hidden rounded-full bg-red-950/80 border border-red-900/70">
+              <div class="h-full w-[70%] rounded-full bg-red-600 shadow-[0_0_10px_rgba(220,38,38,0.7)]"></div>
+            </div>
+          </div>
+          <div>
+            <div class="mb-2 flex items-center justify-between font-orbitron text-sm">
+              <span class="text-gray-300">FOV FPP</span>
+              <span class="font-bold text-red-400">100%</span>
+            </div>
+            <div role="progressbar" aria-label="FOV FPP" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" class="h-2.5 overflow-hidden rounded-full bg-red-950/80 border border-red-900/70">
+              <div class="h-full w-full rounded-full bg-red-600 shadow-[0_0_10px_rgba(220,38,38,0.7)]"></div>
+            </div>
+          </div>
+          <div class="pt-4 border-t border-red-900/60">
+            <div class="flex items-center justify-between gap-4">
+              <span class="font-orbitron text-sm text-gray-300">SYNC ADS TO FOV TO SCOPE ZOOM</span>
+              <div role="group" aria-label="Sync ADS to FOV to Scope Zoom setting" class="flex shrink-0 items-center gap-1 rounded-lg border border-red-900/70 bg-red-950/60 p-1 font-orbitron text-xs font-bold">
+                <span aria-label="On, selected" aria-pressed="true" class="rounded-md bg-red-700 px-2.5 py-1.5 text-white">ON</span>
+                <span aria-label="Off, not selected" aria-pressed="false" class="rounded-md px-2.5 py-1.5 text-gray-500">OFF</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="graphicsSettingsPanel" role="tabpanel" aria-labelledby="graphicsSettingsTab" class="hidden min-w-0 w-full space-y-5">
+          <div class="flex items-center justify-between border-b border-red-900/60 pb-4 font-orbitron text-sm">
+            <span class="text-gray-300">GRAPHIC QUALITY</span>
+            <span class="font-bold text-red-400">LOW</span>
+          </div>
+          <div class="flex items-center justify-between font-orbitron text-sm">
+            <span class="text-gray-300">FRAME RATE</span>
+            <span class="text-right font-bold text-red-400">ULTRA<br><span class="text-xs text-gray-400">110FPS</span></span>
+          </div>
+        </div>
+        <div id="sensitivitySettingsPanel" role="tabpanel" aria-labelledby="sensitivitySettingsTab" class="hidden max-h-[65vh] min-w-0 w-full space-y-4 overflow-y-auto pr-2">
+          <div class="rounded-lg border border-red-900/60 bg-red-950/30 p-4">
+            <h3 class="mb-4 border-b border-red-900/60 pb-2 font-orbitron text-sm font-bold text-red-300">CAMERA SENSITIVITY</h3>
+            <div class="space-y-4">
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">STEERING SENSITIVITY</div><div role="img" aria-label="Steering Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">RED DOT/HOLO SENSITIVITY</div><div role="img" aria-label="Red Dot/Holo Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">ADS SENSITIVITY</div><div role="img" aria-label="ADS Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">TACTICAL SCOPE SENSITIVITY</div><div role="img" aria-label="Tactical Scope Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">SNIPER SCOPE SENSITIVITY</div><div role="img" aria-label="Sniper Scope Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">VERTICAL TURNING SENSITIVITY</div><div role="img" aria-label="Vertical Turning Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+            </div>
+          </div>
+          <div class="rounded-lg border border-red-900/60 bg-red-950/30 p-4">
+            <h3 class="mb-4 border-b border-red-900/60 pb-2 font-orbitron text-sm font-bold text-red-300">FIRING SENSITIVITY</h3>
+            <div class="space-y-4">
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">STEERING SENSITIVITY</div><div role="img" aria-label="Steering Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">RED DOT/HOLO SENSITIVITY</div><div role="img" aria-label="Red Dot/Holo Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">ADS SENSITIVITY</div><div role="img" aria-label="ADS Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">TACTICAL SCOPE SENSITIVITY</div><div role="img" aria-label="Tactical Scope Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">SNIPER SCOPE SENSITIVITY</div><div role="img" aria-label="Sniper Scope Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">VERTICAL TURNING SENSITIVITY</div><div role="img" aria-label="Vertical Turning Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+            </div>
+          </div>
+          <div class="rounded-lg border border-red-900/60 bg-red-950/30 p-4">
+            <h3 class="mb-4 border-b border-red-900/60 pb-2 font-orbitron text-sm font-bold text-red-300">GYROSCOPE SENSITIVITY</h3>
+            <div class="space-y-4">
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">STEERING SENSITIVITY</div><div role="img" aria-label="Steering Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">RED DOT/HOLO SENSITIVITY</div><div role="img" aria-label="Red Dot/Holo Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">ADS SENSITIVITY</div><div role="img" aria-label="ADS Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">TACTICAL SCOPE SENSITIVITY</div><div role="img" aria-label="Tactical Scope Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">SNIPER SCOPE SENSITIVITY</div><div role="img" aria-label="Sniper Scope Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">VERTICAL TURNING SENSITIVITY</div><div role="img" aria-label="Vertical Turning Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+            </div>
+          </div>
+          <div class="rounded-lg border border-red-900/60 bg-red-950/30 p-4">
+            <h3 class="mb-4 border-b border-red-900/60 pb-2 font-orbitron text-sm font-bold text-red-300">GYROSCOPE FIRE SENSITIVITY</h3>
+            <div class="space-y-4">
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">STEERING SENSITIVITY</div><div role="img" aria-label="Steering Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">RED DOT/HOLO SENSITIVITY</div><div role="img" aria-label="Red Dot/Holo Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">ADS SENSITIVITY</div><div role="img" aria-label="ADS Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">TACTICAL SCOPE SENSITIVITY</div><div role="img" aria-label="Tactical Scope Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">SNIPER SCOPE SENSITIVITY</div><div role="img" aria-label="Sniper Scope Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+              <div><div class="mb-1 font-orbitron text-xs text-gray-300">VERTICAL TURNING SENSITIVITY</div><div role="img" aria-label="Vertical Turning Sensitivity slider, static" class="h-2 rounded-full bg-red-950"><div class="relative h-full w-[60%] rounded-full bg-red-600"><span class="absolute -right-1.5 -top-1 h-4 w-4 rounded-full border-2 border-red-300 bg-red-700"></span></div></div></div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- TOAST NOTIFICATION -->
   <div id="toast" class="fixed bottom-6 left-6 bg-red-900/90 text-white px-5 py-2.5 rounded-xl shadow-2xl font-orbitron text-sm hidden items-center gap-2.5 border border-red-500 z-50 transition-all duration-300 backdrop-blur-md">
     <i data-lucide="check-circle-2" class="w-5 h-5 text-red-400"></i> <span id="toastMsg">Code copied to clipboard!</span>
@@ -321,13 +442,16 @@
 
     <div class="flex items-center gap-3">
       <a href="https://www.facebook.com/profile.php?id=61586976453097" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 rounded-full bg-white/5 hover:bg-red-700 flex items-center justify-center transition-all duration-200 text-white hover:scale-110">
-        <i class="fa-brands fa-facebook-f w-4 h-4" aria-hidden="true"></i>
+        <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
       </a>
       <a href="https://discord.gg/xKjUSzqJm9" target="_blank" rel="noopener noreferrer" aria-label="Discord" class="w-8 h-8 rounded-full bg-white/5 hover:bg-red-700 flex items-center justify-center transition-all duration-200 text-white hover:scale-110">
-        <i class="fa-brands fa-discord w-4 h-4" aria-hidden="true"></i>
+        <i class="fa-brands fa-discord" aria-hidden="true"></i>
       </a>
       <a href="https://www.instagram.com/vxjyue/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 rounded-full bg-white/5 hover:bg-red-700 flex items-center justify-center transition-all duration-200 text-white hover:scale-110">
-        <i class="fa-brands fa-instagram w-4 h-4" aria-hidden="true"></i>
+        <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+      </a>
+      <a href="https://www.youtube.com/@kyuecodm" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-8 h-8 rounded-full bg-white/5 hover:bg-red-700 flex items-center justify-center transition-all duration-200 text-white hover:scale-110">
+        <i class="fa-brands fa-youtube" aria-hidden="true"></i>
       </a>
     </div>
   </footer>
@@ -717,6 +841,144 @@
       window.closeAttachmentModal = function() {
         const modal = document.getElementById('attachmentModal');
         modal.classList.add('hidden-modal');
+      };
+
+      const sensitivityPercentages = [34, 41, 41, 41, 31, 95];
+      const firingSensitivityPercentages = [38, 38, 38, 38, 23, 86];
+      const gyroscopeSensitivityPercentages = [63, 33, 33, 33, 12, 55];
+      const gyroscopeFireSensitivityPercentages = [25, 26, 26, 26, 12, 55];
+      document.querySelectorAll('#sensitivitySettingsPanel .rounded-lg.border').forEach(section => {
+        const heading = section.querySelector('h3')?.textContent?.trim();
+        const percentages = heading === 'FIRING SENSITIVITY'
+          ? firingSensitivityPercentages
+          : heading === 'GYROSCOPE SENSITIVITY'
+            ? gyroscopeSensitivityPercentages
+            : heading === 'GYROSCOPE FIRE SENSITIVITY'
+              ? gyroscopeFireSensitivityPercentages
+            : sensitivityPercentages;
+
+        section.querySelectorAll('[role="img"][aria-label$="slider, static"]').forEach((slider, index) => {
+          const percentage = percentages[index];
+          const label = slider.previousElementSibling;
+          const bar = slider.firstElementChild;
+          if (percentage === undefined || !label || !bar) return;
+
+          label.classList.add('flex', 'items-center', 'justify-between');
+          const value = document.createElement('span');
+          value.className = 'font-bold text-red-400';
+          value.textContent = `${percentage}%`;
+          label.append(value);
+          slider.setAttribute('aria-label', `${slider.getAttribute('aria-label').replace(', static', '')}, ${percentage}%, static`);
+          bar.style.width = `${percentage}%`;
+        });
+      });
+
+      let activeSettingsCategory = 'basic';
+      let settingsHeightAnimation = null;
+      let settingsContentAnimation = null;
+      const settingsCategoryList = document.getElementById('settingsCategoryList');
+      const settingsCategoryIndicator = document.getElementById('settingsCategoryIndicator');
+      const initialSettingsTab = document.getElementById('basicSettingsTab');
+      if (settingsCategoryList && settingsCategoryIndicator && initialSettingsTab) {
+        const listRect = settingsCategoryList.getBoundingClientRect();
+        const tabRect = initialSettingsTab.getBoundingClientRect();
+        settingsCategoryIndicator.style.transition = 'none';
+        settingsCategoryIndicator.style.height = `${tabRect.height}px`;
+        settingsCategoryIndicator.style.transform = `translateY(${tabRect.top - listRect.top}px)`;
+        settingsCategoryIndicator.offsetHeight;
+        settingsCategoryIndicator.style.removeProperty('transition');
+      }
+
+      window.selectSettingsCategory = function(category) {
+        const categories = [
+          { name: 'basic', tabId: 'basicSettingsTab', panelId: 'basicSettingsPanel' },
+          { name: 'graphics', tabId: 'graphicsSettingsTab', panelId: 'graphicsSettingsPanel' },
+          { name: 'sensitivity', tabId: 'sensitivitySettingsTab', panelId: 'sensitivitySettingsPanel' }
+        ];
+
+        const selectedIndex = categories.findIndex(item => item.name === category);
+        if (selectedIndex < 0) return;
+        if (category === activeSettingsCategory) return;
+
+        const panelsContainer = document.getElementById('settingsPanels');
+        const categoryList = document.getElementById('settingsCategoryList');
+        const categoryIndicator = document.getElementById('settingsCategoryIndicator');
+        const currentPanel = document.getElementById(`${activeSettingsCategory}SettingsPanel`);
+        const nextPanel = document.getElementById(`${category}SettingsPanel`);
+        const nextTab = document.getElementById(`${category}SettingsTab`);
+        if (!panelsContainer || !categoryList || !categoryIndicator || !currentPanel || !nextPanel || !nextTab) return;
+
+        const listRect = categoryList.getBoundingClientRect();
+        const tabRect = nextTab.getBoundingClientRect();
+        categoryIndicator.style.height = `${tabRect.height}px`;
+        categoryIndicator.style.transform = `translateY(${tabRect.top - listRect.top}px)`;
+
+        settingsHeightAnimation?.cancel();
+        settingsContentAnimation?.cancel();
+        panelsContainer.style.height = '';
+        const currentHeight = panelsContainer.getBoundingClientRect().height;
+
+        categories.forEach(({ name, tabId, panelId }) => {
+          const tab = document.getElementById(tabId);
+          const panel = document.getElementById(panelId);
+          if (!tab || !panel) return;
+
+          const isSelected = name === category;
+          tab.setAttribute('aria-selected', String(isSelected));
+          tab.classList.toggle('text-red-300', isSelected);
+          tab.classList.toggle('text-gray-500', !isSelected);
+          panel.classList.toggle('hidden', !isSelected);
+          panel.classList.remove('settings-morph-fallback');
+        });
+
+        const nextHeight = nextPanel.getBoundingClientRect().height;
+        panelsContainer.style.height = `${currentHeight}px`;
+        settingsHeightAnimation = panelsContainer.animate(
+          [{ height: `${currentHeight}px` }, { height: `${nextHeight}px` }],
+          { duration: 360, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+        );
+        settingsHeightAnimation.onfinish = () => {
+          panelsContainer.style.height = '';
+          settingsHeightAnimation = null;
+        };
+
+        const direction = selectedIndex > categories.findIndex(item => item.name === activeSettingsCategory) ? 1 : -1;
+        if (typeof nextPanel.animate === 'function') {
+          settingsContentAnimation = nextPanel.animate(
+            [
+              { opacity: 0, transform: `translateY(${direction * 8}px) scale(0.985)`, filter: 'blur(2px)' },
+              { opacity: 1, transform: 'translateY(0) scale(1)', filter: 'blur(0)' }
+            ],
+            { duration: 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+          );
+        } else {
+          nextPanel.classList.add('settings-morph-fallback');
+          nextPanel.addEventListener('animationend', () => {
+            nextPanel.classList.remove('settings-morph-fallback');
+          }, { once: true });
+        }
+        activeSettingsCategory = category;
+      };
+
+      window.openSettingsModal = function() {
+        const modal = document.getElementById('settingsModal');
+        const settingsButton = document.getElementById('settingsButton');
+        const exitButton = document.getElementById('settingsExitButton');
+        if (!modal || !settingsButton || !exitButton) return;
+
+        modal.classList.remove('hidden-modal');
+        settingsButton.setAttribute('aria-expanded', 'true');
+        exitButton.focus();
+      };
+
+      window.closeSettingsModal = function() {
+        const modal = document.getElementById('settingsModal');
+        const settingsButton = document.getElementById('settingsButton');
+        if (!modal || !settingsButton) return;
+
+        modal.classList.add('hidden-modal');
+        settingsButton.setAttribute('aria-expanded', 'false');
+        settingsButton.focus();
       };
 
     });
