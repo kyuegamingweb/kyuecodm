@@ -126,6 +126,81 @@
       from { opacity: 0; transform: translateY(6px) scale(0.985); filter: blur(2px); }
       to { opacity: 1; transform: scale(1); filter: blur(0); }
     }
+    @media (max-width: 640px) {
+      body.bg-codm {
+        background-attachment: scroll;
+      }
+      header {
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+      }
+      header > div:last-child {
+        max-width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        row-gap: 8px;
+      }
+      #settingsModal {
+        align-items: flex-start;
+        overflow-y: auto;
+        padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom));
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+      }
+      #settingsModal > .modal-box {
+        width: 100%;
+        max-height: calc(100dvh - 16px);
+        overflow: hidden;
+        padding: 16px;
+        box-shadow: 0 0 18px rgba(180, 20, 30, 0.2);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+      }
+      #settingsModal > .modal-box > .mt-6.flex {
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      #settingsCategoryList {
+        width: 100%;
+        flex-direction: row;
+        gap: 4px;
+        overflow-x: hidden;
+        border-right: 0;
+        border-bottom: 1px solid rgba(127, 29, 29, 0.6);
+        padding: 0 0 8px;
+      }
+      #settingsCategoryIndicator {
+        left: 0;
+        right: auto;
+        transition-property: width, transform;
+      }
+      #settingsCategoryList [role="tab"] {
+        width: auto;
+        min-height: 40px;
+        min-width: 0;
+        flex: 1 1 0;
+        padding: 10px 4px;
+        font-size: 10px;
+        text-align: center;
+        white-space: nowrap;
+      }
+      #settingsPanels {
+        max-height: calc(100dvh - 170px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+      }
+      #sensitivitySettingsPanel {
+        max-height: calc(100dvh - 180px);
+      }
+      #settingsModal .rounded-lg.border.bg-red-950\/30 {
+        padding: 12px;
+      }
+      #settingsModal .space-y-4 > div > .mb-1 {
+        font-size: 11px;
+      }
+    }
   </style>
 </head>
 <body class="bg-codm min-h-screen flex flex-col justify-between selection:bg-red-700 selection:text-white">
@@ -876,18 +951,31 @@
       let activeSettingsCategory = 'basic';
       let settingsHeightAnimation = null;
       let settingsContentAnimation = null;
-      const settingsCategoryList = document.getElementById('settingsCategoryList');
-      const settingsCategoryIndicator = document.getElementById('settingsCategoryIndicator');
-      const initialSettingsTab = document.getElementById('basicSettingsTab');
-      if (settingsCategoryList && settingsCategoryIndicator && initialSettingsTab) {
+      const updateSettingsCategoryIndicator = (animate = false) => {
+        const settingsCategoryList = document.getElementById('settingsCategoryList');
+        const settingsCategoryIndicator = document.getElementById('settingsCategoryIndicator');
+        const selectedTab = document.getElementById(`${activeSettingsCategory}SettingsTab`);
+        if (!settingsCategoryList || !settingsCategoryIndicator || !selectedTab) return;
+
         const listRect = settingsCategoryList.getBoundingClientRect();
-        const tabRect = initialSettingsTab.getBoundingClientRect();
-        settingsCategoryIndicator.style.transition = 'none';
+        const tabRect = selectedTab.getBoundingClientRect();
+        const isPhoneLayout = window.matchMedia('(max-width: 640px)').matches;
+        settingsCategoryIndicator.style.transition = animate ? '' : 'none';
         settingsCategoryIndicator.style.height = `${tabRect.height}px`;
-        settingsCategoryIndicator.style.transform = `translateY(${tabRect.top - listRect.top}px)`;
-        settingsCategoryIndicator.offsetHeight;
-        settingsCategoryIndicator.style.removeProperty('transition');
-      }
+        if (isPhoneLayout) {
+          settingsCategoryIndicator.style.width = `${selectedTab.offsetWidth}px`;
+          settingsCategoryIndicator.style.transform = `translateX(${selectedTab.offsetLeft}px)`;
+        } else {
+          settingsCategoryIndicator.style.removeProperty('width');
+          settingsCategoryIndicator.style.transform = `translateY(${tabRect.top - listRect.top}px)`;
+        }
+        if (!animate) {
+          settingsCategoryIndicator.offsetHeight;
+          settingsCategoryIndicator.style.removeProperty('transition');
+        }
+      };
+      updateSettingsCategoryIndicator();
+      window.addEventListener('resize', () => updateSettingsCategoryIndicator());
 
       window.selectSettingsCategory = function(category) {
         const categories = [
@@ -908,10 +996,10 @@
         const nextTab = document.getElementById(`${category}SettingsTab`);
         if (!panelsContainer || !categoryList || !categoryIndicator || !currentPanel || !nextPanel || !nextTab) return;
 
-        const listRect = categoryList.getBoundingClientRect();
-        const tabRect = nextTab.getBoundingClientRect();
-        categoryIndicator.style.height = `${tabRect.height}px`;
-        categoryIndicator.style.transform = `translateY(${tabRect.top - listRect.top}px)`;
+        const previousIndex = categories.findIndex(item => item.name === activeSettingsCategory);
+        const isPhoneLayout = window.matchMedia('(max-width: 640px)').matches;
+        activeSettingsCategory = category;
+        updateSettingsCategoryIndicator(true);
 
         settingsHeightAnimation?.cancel();
         settingsContentAnimation?.cancel();
@@ -931,25 +1019,27 @@
           panel.classList.remove('settings-morph-fallback');
         });
 
-        const nextHeight = nextPanel.getBoundingClientRect().height;
-        panelsContainer.style.height = `${currentHeight}px`;
-        settingsHeightAnimation = panelsContainer.animate(
-          [{ height: `${currentHeight}px` }, { height: `${nextHeight}px` }],
-          { duration: 360, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
-        );
-        settingsHeightAnimation.onfinish = () => {
-          panelsContainer.style.height = '';
-          settingsHeightAnimation = null;
-        };
+        if (!isPhoneLayout) {
+          const nextHeight = nextPanel.getBoundingClientRect().height;
+          panelsContainer.style.height = `${currentHeight}px`;
+          settingsHeightAnimation = panelsContainer.animate(
+            [{ height: `${currentHeight}px` }, { height: `${nextHeight}px` }],
+            { duration: 360, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+          );
+          settingsHeightAnimation.onfinish = () => {
+            panelsContainer.style.height = '';
+            settingsHeightAnimation = null;
+          };
+        }
 
-        const direction = selectedIndex > categories.findIndex(item => item.name === activeSettingsCategory) ? 1 : -1;
+        const direction = selectedIndex > previousIndex ? 1 : -1;
         if (typeof nextPanel.animate === 'function') {
           settingsContentAnimation = nextPanel.animate(
             [
-              { opacity: 0, transform: `translateY(${direction * 8}px) scale(0.985)`, filter: 'blur(2px)' },
-              { opacity: 1, transform: 'translateY(0) scale(1)', filter: 'blur(0)' }
+              { opacity: 0, transform: `translateY(${direction * 8}px) scale(0.985)`, filter: isPhoneLayout ? 'none' : 'blur(2px)' },
+              { opacity: 1, transform: 'translateY(0) scale(1)', filter: 'none' }
             ],
-            { duration: 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+            { duration: isPhoneLayout ? 220 : 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
           );
         } else {
           nextPanel.classList.add('settings-morph-fallback');
@@ -957,7 +1047,6 @@
             nextPanel.classList.remove('settings-morph-fallback');
           }, { once: true });
         }
-        activeSettingsCategory = category;
       };
 
       window.openSettingsModal = function() {
